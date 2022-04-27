@@ -71,20 +71,14 @@ router.put('/todos/:id', authUser, async function(req, res, next) {
       req.params.id,
       );
       // 변경 내용이 없음
-      if (!result[0].affectedRows){
-        return res.json({
-          'status': 304,
-          'error': 'not modified',
-        });
-      };
+      if (!result[0].affectedRows) next(Error('Not_modified'))
+
       // 업데이트 내용 반환
       return res.send(result)
+
   } catch (err) {
-    console.log(err)
-    res.json({
-      'status': 400,
-      'error': err,
-    })
+    console.log(err);
+    next(Error('Server_Error'));
   }
 
 });
@@ -98,17 +92,14 @@ router.delete('/todos/:id', authUser, async function(req, res, next) {
       req.params.id,
     );
     // 변경 내용이 없음
-    if (!result[0].affectedRows){
-      return res.json({
-        'status': 304,
-        'error': 'not modified',
-      });
-    };
+    if (!result[0].affectedRows) next(Error('Not_modified'))
+
     // 삭제 성공
     return res.sendStatus(204);
 
   } catch(err) {
     console.log(err);
+    next(Error('Server_Error'))
   }
 });
 
