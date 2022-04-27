@@ -33,6 +33,8 @@ router.get('/todos/:id', authUser, async function(req, res, next) {
 router.get('/todos', authUser, async function(req, res, next) {
   const result = await sql.getTodoList(
     req.query.apikey,
+    req.query.limit,
+    req.query.skip,
   )
   res.send(result)
 });

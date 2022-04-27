@@ -51,13 +51,14 @@ const sql = {
     return result[0]
   },
 
-  getTodoList : async (apikey) => {
+  getTodoList : async (apikey, limit, skip) => {
     console.log(apikey)
     const result = await promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
       WHERE fk_user_id = ${apikey}
       ORDER BY id
+      LIMIT ${limit} OFFSET ${skip}
     `)
     return result[0]
   },
