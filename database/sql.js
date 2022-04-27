@@ -32,13 +32,13 @@ const sql = {
       VALUES
       ('${content}', ${completed}, ${user_id})
       `)
-    insertId = result[0].insertId
-    const insertInfo = await promisePool.query(`
-      SELECT fk_user_id, name, completed, completed_at, created_at, updated_at
+    insertedId = result[0].insertId
+    const insertedInfo = await promisePool.query(`
+      SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
-      WHERE id = ${insertId};
+      WHERE id = ${insertedId};
     `)
-    return insertInfo[0]; 
+    return insertedInfo[0]; 
   },
 
   getTodo : async (apikey, id) => {
