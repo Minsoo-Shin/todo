@@ -1,4 +1,5 @@
 const mysql = require('mysql2');
+const isEmpty = require('../routes/isEmpty');
 
 const pool = mysql.createPool(
   process.env.JAWSDB_URL ?? {
@@ -17,8 +18,8 @@ const sql = {
 
   findUser : async (apikey) => {
     let obj = await promisePool.query(`
-    SELECT * FROM user
-    WHERE ${apikey} = user.user_id`)
+      SELECT * FROM user
+      WHERE ${apikey} = user.user_id`)
     return obj[0];
   },
 
@@ -31,6 +32,8 @@ const sql = {
       VALUES
       ('${content}', ${completed}, ${user_id})
       `)
+    //수정) result[0] 아무것도 인서트가 안됐다면 
+    console.log('???', result)
     insertedId = result[0].insertId
     const insertedInfo = await promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
@@ -48,33 +51,38 @@ const sql = {
       WHERE fk_user_id = ${apikey} and id = ${id}
       ORDER BY id
     `)
-    return result[0]
+    return result
   },
 
   getTodoList : async (apikey, limit, skip) => {
     console.log(apikey)
-    const result = await promisePool.query(`
+    return promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
       WHERE fk_user_id = ${apikey}
       ORDER BY id
       LIMIT ${limit} OFFSET ${skip}
     `)
-    return result[0]
   },
 
   updateCompleted : async (apikey, id) => {
     console.log(apikey, id)
-    const result = await promisePool.query(`
+    try {
+      const result = promisePool.query(`
       UPDATE todos SET completed=true
       WHERE fk_user_id = ${apikey} and id = ${id};
-    `)
-    const updatedInfo = await promisePool.query(`
+      `)
+      if (isEmpty(result.affectdRows)) throw new Error('해당 게시글이 존재하지 않습니다.')
+    
+      const updatedInfo = promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
       WHERE id = ${id};
-    `)
-    return updatedInfo[0]
+      `)
+      res.json(updatedInfo[0])
+    } catch(err) {
+      throw err;
+    }
   },
 
   deleteTodo : async (apikey, id) => {
