@@ -16,7 +16,6 @@ const promisePool = pool.promise();
 const sql = {
 
   findUser : async (apikey) => {
-    console.log("findUser힘수")
     let obj = await promisePool.query(`
     SELECT * FROM user
     WHERE ${apikey} = user.user_id`)
@@ -75,6 +74,14 @@ const sql = {
       WHERE id = ${id};
     `)
     return updatedInfo[0]
+  },
+
+  deleteTodo : async (apikey, id) => {
+    console.log(apikey, id)
+    const result = await promisePool.query(`
+    DELETE FROM todos WHERE id = ${id}
+    `)
+    return result
   }
 }
 

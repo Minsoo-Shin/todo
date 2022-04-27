@@ -20,7 +20,7 @@ router.post('/todos', authUser, async function(req, res, next) {
   res.send(result)
 });
 
-/* get todos */
+/* get todo (specified) */
 router.get('/todos/:id', authUser, async function(req, res, next) {
   const result = await sql.getTodo(
     req.query.apikey,
@@ -44,6 +44,16 @@ router.put('/todos/:id', authUser, async function(req, res, next) {
     req.params.id,
   )
   res.send(result)
+});
+
+/* delete todos */
+router.delete('/todos/:id', authUser, async function(req, res, next) {
+  console.log('id', req.params.id)
+  const result = await sql.deleteTodo(
+    req.query.apikey,
+    req.params.id,
+  )
+  res.sendStatus(204)
 });
 
 
