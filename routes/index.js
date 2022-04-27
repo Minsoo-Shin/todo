@@ -15,35 +15,32 @@ router.post('/todos', authUser, async function(req, res, next) {
       )
       // 변경 내용이 없음
       console.log('??',result)
-      if (!result[0].affectedRows){
-        return res.json({
-          'status': 304,
-          'error': 'not modified',
-        });
-      };
+      if (!result[0].affectedRows) next(Error('Not_modified'))
+
       return res.send(result)
-  } catch (err ) {
+  } catch (err) {
     console.log(err)
-    res.json({
-      'status': err,
-      'error': err.message,
-  });
-}
+    next(Error('Server_Error'))
+  };
 });
 
 /* get todo (specified) */
 router.get('/todos/:id', authUser, async function(req, res, next) {
-  const result = await sql.getTodo(
-    req.query.apikey,
-    req.params.id,
-  )
-  if (isEmpty(result[0])){
-    return res.json({
-      'status': 404,
-      'error': '해당 게시글을 찾지 못했습니다.'
-    })
+  try {
+    const result = await sql.getTodo(
+      req.query.apikey,
+      req.params.id,
+    )
+    // 게시글을 못 찾았을 경우
+    if (isEmpty(result[0])) next(Error('Not_Found'))
+
+    // 특정 게시글 객체 반환
+    return res.send(result[0])
+
+  } catch(err) {
+    console.log(err);
+    next(Error('Server_Error'))
   }
-  return res.send(result[0])
 });
 
 /* get todos */
@@ -54,13 +51,9 @@ router.get('/todos', authUser, async function(req, res, next) {
       req.query.limit,
       req.query.skip,
     )
-    if (isEmpty(result[0])){
-      return res.json({
-        'status': 404,
-        'error': '해당 게시글을 찾지 못했습니다.'
-      })
-    }
-    return res.send(result)
+    // 찾은 값 반환
+    return res.send(result[0])
+
   } catch (err) {
     console.log(err)
     res.json({
