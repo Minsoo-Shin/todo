@@ -43,7 +43,7 @@ router.get('/todos/:id', authUser, async function(req, res, next) {
       'error': '해당 게시글을 찾지 못했습니다.'
     })
   }
-  return res.send(result)
+  return res.send(result[0])
 });
 
 /* get todos */

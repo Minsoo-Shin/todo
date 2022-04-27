@@ -51,7 +51,7 @@ const sql = {
       WHERE fk_user_id = ${apikey} and id = ${id}
       ORDER BY id
     `)
-    return result
+    return result[0]
   },
 
   getTodoList : async (apikey, limit, skip) => {
