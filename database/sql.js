@@ -61,6 +61,20 @@ const sql = {
       ORDER BY id
     `)
     return result[0]
+  },
+
+  updateCompleted : async (apikey, id) => {
+    console.log(apikey, id)
+    const result = await promisePool.query(`
+      UPDATE todos SET completed=true
+      WHERE fk_user_id = ${apikey} and id = ${id};
+    `)
+    const updatedInfo = await promisePool.query(`
+      SELECT id, name, completed, completed_at, created_at, updated_at
+      FROM todos
+      WHERE id = ${id};
+    `)
+    return updatedInfo[0]
   }
 }
 

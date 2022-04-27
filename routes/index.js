@@ -37,5 +37,14 @@ router.get('/todos', authUser, async function(req, res, next) {
   res.send(result)
 });
 
+/* update todos (completed column) */
+router.put('/todos/:id', authUser, async function(req, res, next) {
+  const result = await sql.updateCompleted(
+    req.query.apikey,
+    req.params.id,
+  )
+  res.send(result)
+});
+
 
 module.exports = router;
