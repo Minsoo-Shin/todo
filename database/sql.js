@@ -38,8 +38,19 @@ const sql = {
       FROM todos
       WHERE id = ${insertId};
     `)
-    return insertInfo[0];
+    return insertInfo[0]; 
   },
+
+  getTodo : async (apikey, id) => {
+    console.log(apikey, id)
+    const result = await promisePool.query(`
+      SELECT id, name, completed, completed_at, created_at, updated_at
+      FROM todos
+      WHERE fk_user_id = ${apikey} and id = ${id}
+      ORDER BY id
+    `)
+    return result[0]
+  }
 }
 
 module.exports = sql

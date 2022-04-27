@@ -9,7 +9,7 @@ router.get('/', authUser, function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-/* create todos */ 
+/* create todos */
 router.post('/todos', authUser, async function(req, res, next) {
   console.log(req.body)
   const result = await sql.createTodo(
@@ -17,8 +17,17 @@ router.post('/todos', authUser, async function(req, res, next) {
     req.body.name,
     req.body.completed,
   )
-  console.log('===',result[0])
   res.send(result)
 });
+
+/* get todos */
+router.get('/todos/:id', authUser, async function(req, res, next) {
+  const result = await sql.getTodo(
+    req.query.apikey,
+    req.params.id,
+  )
+  res.send(result)
+});
+
 
 module.exports = router;
