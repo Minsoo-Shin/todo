@@ -29,5 +29,13 @@ router.get('/todos/:id', authUser, async function(req, res, next) {
   res.send(result)
 });
 
+/* get todos */
+router.get('/todos', authUser, async function(req, res, next) {
+  const result = await sql.getTodoList(
+    req.query.apikey,
+  )
+  res.send(result)
+});
+
 
 module.exports = router;
