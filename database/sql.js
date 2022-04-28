@@ -1,5 +1,5 @@
 const mysql = require('mysql2');
-const isEmpty = require('../routes/isEmpty');
+const isEmpty = require('../service/isEmpty');
 
 const pool = mysql.createPool(
   process.env.JAWSDB_URL ?? {

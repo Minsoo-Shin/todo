@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const authUser = require('./authUser');
-const ctrl = require('./index.ctrl');
+const authUser = require('../service/authUser');
+const ctrl = require('../service/index.ctrl');
 
 
 /* create todos */
