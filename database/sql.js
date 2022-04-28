@@ -32,8 +32,8 @@ const sql = {
       VALUES
       ('${content}', ${completed}, ${user_id})
       `)
-    // 변경 내용이 없으면 return 
-    if (!result[0].affectedRows) return next(Error('Not_modified'))
+    // // 변경 내용이 없으면 return 
+    // if (!result[0].affectedRows) return next(Error('Not_modified'))
 
     insertedId = result[0].insertId
     const insertedInfo = await promisePool.query(`
@@ -72,18 +72,19 @@ const sql = {
       const result = await promisePool.query(`
       UPDATE todos 
       SET completed=${completed}, 
-            name="${name}"
+            name="${name}",
+            completed_at=current_timestamp
       WHERE fk_user_id = ${apikey} and id = ${id};
       `)
-      console.log('==1===', result[0].affectedRows)
+      // console.log('==1===', result[0].affectedRows)
       // if (!result[0].affectdRows) return next(Error('Not_modified'))
-      console.log('==1===')
+      // console.log('==1===')
       const updatedInfo = await promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
       WHERE id = ${id};
       `)
-      console.log('==2===')
+      // console.log('==2===')
       return updatedInfo[0]
     } catch(err) {
       throw err;
