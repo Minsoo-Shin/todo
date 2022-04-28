@@ -11,10 +11,6 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -46,14 +42,6 @@ app.use((err, req, res, next) => {
 app.use((err, req, res, next) => {
   if (err.message === 'Not_modified') {
     return res.status(304).json({ status : 304, error : err.message});
-  // } else if (err.message === 'Not_Authorized') {
-  //   return res.status(401).json({ status : 401, error : err.message});
-  // } else if (err.message === 'Forbbiden') {
-  //   return res.status(403).json({ status : 403, error : err.message});
-  // } else if (err.message === 'Not_Found') {
-  //   return res.status(404).json({ status : 404, error : err.message});
-  // } else if (err.message === 'Server_Error') {
-  //   return res.status(500).json({ status : 500, error : err.message});
   }
   next(err);
 });

@@ -74,17 +74,13 @@ const sql = {
       SET completed=${completed}, 
             name="${name}",
             completed_at=current_timestamp
-      WHERE fk_user_id = ${apikey} and id = ${id};
+                  WHERE id = ${id};
       `)
-      // console.log('==1===', result[0].affectedRows)
-      // if (!result[0].affectdRows) return next(Error('Not_modified'))
-      // console.log('==1===')
       const updatedInfo = await promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
       WHERE id = ${id};
       `)
-      // console.log('==2===')
       return updatedInfo[0]
     } catch(err) {
       throw err;

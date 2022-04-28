@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const authUser = require('./middles');
-const ctrl = require('./todo.crt');
+const authUser = require('./authUser');
+const ctrl = require('./index.ctrl');
 
 
 /* create todos */
