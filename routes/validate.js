@@ -1,10 +1,13 @@
 const _ = require('lodash'); 
 const MAX_LIMIT = 100;
+const MIN_LIMIT = 1
 const DEFAULT_LIMIT = 10;
 const DEFAULT_SKIP = 0;
+const MAX_ID = 1000000
+const MIN_ID = 0
 
 async function validate(object) {
-    const {req, name, completed, limit, skip} = object;
+    const {req, name, completed, limit, skip, id} = object;
     console.log(req.body)
     if (name){
         console.log('checkName')
@@ -28,6 +31,11 @@ async function validate(object) {
         const querySkip = req.query.skip;
         if (!checkSkip(querySkip)) return false;
     }
+    if (id) {
+        console.log('checkId');
+        const queryId = req.params.id;
+        if (!checkId(queryId)) return false;
+    }
     return true
 }
 
@@ -47,8 +55,7 @@ function checkLimit(limit) {
     const intlimit = parseInt(limit, DEFAULT_LIMIT);
     console.log('===',intlimit)
     if (Number.isNaN(intlimit)) return false;
-    if (_.toLength(limit) > MAX_LIMIT)
-        return false;
+    if (limit > MAX_LIMIT || limit < MIN_LIMIT) return false;
     return true;
 }
 function checkSkip(skip) { // 왜 schemas에 skip타입이 string이지?  
@@ -56,6 +63,12 @@ function checkSkip(skip) { // 왜 schemas에 skip타입이 string이지?
     if (Number.isNaN(intskip)) return false;
     return true
 }
-
+function checkId(id) { // 왜 schemas에 skip타입이 string이지?  
+    const intid = parseInt(id, DEFAULT_SKIP);
+    if (Number.isNaN(intid)) return false;
+    if (intid > MAX_ID || intid < MIN_ID) return false;
+    return true
+}
+ 
 
 module.exports = validate;

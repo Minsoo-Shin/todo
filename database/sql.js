@@ -66,21 +66,25 @@ const sql = {
     `)
   },
 
-  updateCompleted : async (apikey, id) => {
-    console.log(apikey, id)
+  updateCompleted : async (apikey, id, name, completed, next) => {
+    console.log(apikey, id, name, completed)
     try {
-      const result = promisePool.query(`
-      UPDATE todos SET completed=true
+      const result = await promisePool.query(`
+      UPDATE todos 
+      SET completed=${completed}, 
+            name="${name}"
       WHERE fk_user_id = ${apikey} and id = ${id};
       `)
-      if (isEmpty(result.affectdRows)) throw new Error('해당 게시글이 존재하지 않습니다.')
-    
-      const updatedInfo = promisePool.query(`
+      console.log('==1===', result[0].affectedRows)
+      // if (!result[0].affectdRows) return next(Error('Not_modified'))
+      console.log('==1===')
+      const updatedInfo = await promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
       WHERE id = ${id};
       `)
-      res.json(updatedInfo[0])
+      console.log('==2===')
+      return updatedInfo[0]
     } catch(err) {
       throw err;
     }
