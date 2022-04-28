@@ -9,8 +9,7 @@ const _ = require('lodash');
 /* create todos */
 router.post('/todos', authUser, async function(req, res, next) {
   try {
-    const check = await validate({req:req.body, name:true, completed:true, limit:false, skip:false});
-    console.log(check)
+    const check = await validate({req:req, name:true, completed:true, limit:false, skip:false});
     if (!check) return next(Error('Bad_Request'));
 
     const result = await sql.createTodo(
@@ -44,13 +43,20 @@ router.get('/todos/:id', authUser, async function(req, res, next) {
 
   } catch(err) {
     console.log(err);
-    next(Error('Server_Error'))
+    next(Error(err))
   }
 });
 
 /* get todos */
 router.get('/todos', authUser, async function(req, res, next) {
   try {
+    const check = await validate({req:req, 
+                                  name:false,
+                                  completed:false, 
+                                  limit:true, 
+                                  skip:true});
+    if (!check) return next(Error('Bad_Request'));
+    
     const result = await sql.getTodoList(
       req.query.apikey,
       req.query.limit,
@@ -60,11 +66,8 @@ router.get('/todos', authUser, async function(req, res, next) {
     return res.send(result[0])
 
   } catch (err) {
-    console.log(err)
-    res.json({
-      'status': 400,
-      'error': err,
-    })
+    console.log(err);
+    next(Error(err))
   }
 });
 
@@ -83,7 +86,7 @@ router.put('/todos/:id', authUser, async function(req, res, next) {
 
   } catch (err) {
     console.log(err);
-    next(Error('Server_Error'));
+    next(Error(err));
   }
 
 });
@@ -104,7 +107,7 @@ router.delete('/todos/:id', authUser, async function(req, res, next) {
 
   } catch(err) {
     console.log(err);
-    next(Error('Server_Error'))
+    next(Error(err))
   }
 });
 
