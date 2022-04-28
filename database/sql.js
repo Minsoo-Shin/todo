@@ -23,7 +23,7 @@ const sql = {
     return obj[0];
   },
 
-  createTodo : async (user_id, content, completed) => {
+  createTodo : async (user_id, content, completed, next) => {
     console.log(user_id, content, completed)
     // 해당 INSERT가 완료하고 해당값 반환
     const result = await promisePool.query(`
@@ -32,8 +32,9 @@ const sql = {
       VALUES
       ('${content}', ${completed}, ${user_id})
       `)
-    //수정) result[0] 아무것도 인서트가 안됐다면 
-    console.log('???', result)
+    // 변경 내용이 없으면 return 
+    if (!result[0].affectedRows) return next(Error('Not_modified'))
+
     insertedId = result[0].insertId
     const insertedInfo = await promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at

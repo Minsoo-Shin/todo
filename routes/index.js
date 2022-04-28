@@ -3,24 +3,29 @@ var router = express.Router();
 var sql = require('../database/sql');
 const isEmpty = require('./isEmpty');
 var authUser = require('./middles');
-
+const validate = require('./validate');
+const _ = require('lodash');
 
 /* create todos */
 router.post('/todos', authUser, async function(req, res, next) {
   try {
+    const check = await validate({req:req.body, name:true, completed:true, limit:false, skip:false});
+    console.log(check)
+    if (!check) return next(Error('Bad_Request'));
+
     const result = await sql.createTodo(
       req.query.apikey,
       req.body.name,
       req.body.completed,
+      next
       )
-      // 변경 내용이 없음
-      console.log('??',result)
-      if (!result[0].affectedRows) next(Error('Not_modified'))
+    // 변경 내용이 없음
+    if (!result[0]) return next(Error('Not_modified'))
 
-      return res.send(result)
+    return res.send(result)
   } catch (err) {
-    console.log(err)
-    next(Error('Server_Error'))
+    console.log('/==',err,'/==',)
+    next(Error(err))
   };
 });
 

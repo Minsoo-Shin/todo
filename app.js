@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser')
 var logger = require('morgan');
 require('express-async-errors');
-var error_msg = require('./definition/error-message')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
