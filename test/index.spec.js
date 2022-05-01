@@ -1,6 +1,56 @@
 const request = require('supertest');
 const should = require('should');
 const app = require('../app');
+const sql = require('../database/sql')
+
+describe('POST /todos는', ()=> {
+    describe('성공시', ()=> {
+        let id = 0
+        afterEach('clear', ()=> {
+            sql.deleteTodo(999, id)
+        });
+
+        it('todo를 만들면 json 형식으로 응답을 받는다. ', (done)=> {
+            request(app)
+                .post('/todos?apikey=999')
+                .send({'name':'lose weight', 'completed':false})
+                .expect(200)
+                .end((req,res)=> {
+                    id = res.body.id;
+                    done()
+                })
+            
+            //삭제 로직 필요
+        }),
+        it('completed에 null값이라도 응답을 받는다. ', (done)=> {
+            request(app)
+                .post(`/todos/?apikey=999`)
+                .send({'name':'lose weight', 'completed':null})
+                .expect(200)
+                .end((req, res)=> {
+                    id = res.body.id;
+                    done()
+                })
+            //삭제 로직 필요
+        })
+    })
+    describe('실패시', ()=> {
+        it('name에 null값이라면', (done)=> {
+            request(app)
+                .post('/todos?apikey=999')
+                .send({'name': null, 'completed':false})
+                .expect(400)
+                .end(done)
+        }),
+        it('completed에 not boolean값이라면', (done)=> {
+            request(app)
+                .post('/todos?apikey=999')
+                .send({'name': 'something', 'completed': 'fal'})
+                .expect(400)
+                .end(done)
+        })
+    })
+})
 
 describe('GET /todos는', () => {
     describe('성공시', () => {
@@ -8,7 +58,6 @@ describe('GET /todos는', () => {
             request(app)
                 .get('/todos?apikey=123&limit=2&skip=1')
                 .end((req,res)=> {
-                    console.log(res.body)
                     res.body.should.be.lengthOf(2);
                     done();
                 })
