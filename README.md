@@ -2,7 +2,7 @@
 > 다음은 todo list api입니다. 
 
 ## 활용스택
-node js, express js, mysql입니다. 
+node js, express js, mysql, mocha입니다. 
 
 ## 진행현황
 #### REST ful API
