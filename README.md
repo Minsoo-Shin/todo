@@ -17,7 +17,7 @@ node js, express js, mysql입니다.
 
 #### Unit Test, Integration Test
 > ```GET Todos``` : 테스트 코드 작성 완료  <br>
-> ```UPATE Todos``` : 진행 중  <br>
+> ```UPATE Todos``` : 테스트 코드 작성 완료  <br>
 > ```DELETE Todos``` : 진행 중  <br>
 > ```CREATE Todos``` : 테스트 코드 작성 완료  <br>
 > ```List Todos``` : 테스트 코드 작성 완료  <br>
