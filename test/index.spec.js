@@ -172,4 +172,30 @@ describe('GET /todos/:id는', () => {
     });
 })
 
+describe('PUT /todos/:id는', () => {
+    let testkey = 999
+    let id = 0
+    before('make', async ()=> {
+        const result = await sql.createTodo(testkey, 'test', false)
+        id = result[0].id
+    })
+    after('clear', (done)=> {
+        sql.deleteTodo(testkey)
+        done();
+    });
+    describe('성공시', () => {
+        it('구체적인 id 게시글을 가져오기', (done)=> {
+            request(app)
+                .put(`/todos/${id}?apikey=${testkey}`)
+                .send({name: 'update', completed: true})
+                .expect(200)
+                .end((req,res)=> {
+                    should(res.body.name).equal('update')
+                    should(res.body.completed).equal(1)
+                    done();
+                })
+        })
+    })
+})
+
 

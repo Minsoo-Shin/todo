@@ -15,4 +15,5 @@ router.get('/todos', authUser, ctrl.getAll);
 router.put('/todos/:id', authUser, ctrl.update);
 /* delete todos */
 router.delete('/todos/:id', authUser, ctrl.remove);
+
 module.exports = router;
