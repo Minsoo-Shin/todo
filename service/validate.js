@@ -8,31 +8,29 @@ const MIN_ID = 0
 
 async function validate(object) {
     const {req, name, completed, limit, skip, id} = object;
-    console.log(req.body)
+    // console.log(req.body)
     if (name){
-        console.log('checkName')
+        // console.log('checkName')
         const bodyName = req.body.name
         if (!checkName(bodyName)) return false
     }
     if (completed) {
-        console.log('checkCompleted')
+        // console.log('checkCompleted')
         const bodyCompleted = req.body.completed;
         if (!checkCompleted(bodyCompleted)) return false;
     }
-    console.log(limit, skip)
     if (limit) {
-        console.log('checkLimit');
+        // console.log('checkLimit');
         const queryLimit = req.query.limit;
         if (!checkLimit(queryLimit)) return false;
     }
-    console.log(skip)
     if (skip) {
-        console.log('checkSkip');
+        // console.log('checkSkip');
         const querySkip = req.query.skip;
         if (!checkSkip(querySkip)) return false;
     }
     if (id) {
-        console.log('checkId');
+        // console.log('checkId');
         const queryId = req.params.id;
         if (!checkId(queryId)) return false;
     }
@@ -51,9 +49,9 @@ function checkCompleted(completed) {
     return false;
 }
 function checkLimit(limit) {
-    console.log(limit)
+    // console.log(limit)
     const intlimit = parseInt(limit, DEFAULT_LIMIT);
-    console.log('===',intlimit)
+    // console.log('===',intlimit)
     if (Number.isNaN(intlimit)) return false;
     if (limit > MAX_LIMIT || limit < MIN_LIMIT) return false;
     return true;
