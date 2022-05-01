@@ -123,3 +123,53 @@ describe('GET /todos는', () => {
     });
 })
 
+describe('GET /todos/:id는', () => {
+    let testkey = 999
+    let id = 0
+    before('make', async ()=> {
+        const result = await sql.createTodo(testkey, 'test', false)
+        id = result[0].id
+
+    })
+    after('clear', (done)=> {
+        sql.deleteTodo(testkey)
+        done();
+    });
+    describe('성공시', () => {
+        it('구체적인 id 게시글을 가져오기', (done)=> {
+            request(app)
+                .get(`/todos/${id}?apikey=${testkey}`)
+                .expect(200)
+                .end((req,res)=> {
+                    should(res.body.id).equal(id)
+                    done();
+                })
+        })
+    })
+    describe('실패시', () => {
+        let NotGoodId;
+        it('id가 범위를 벗어난다면 Bad_request 응답', (done)=> {
+            NotGoodId = -1;
+            request(app)
+                .get(`/todos/:${id}?apikey=${testkey}`)
+                .expect(400)
+                .end(done)
+        }),
+        it('id가 숫자가 아니라면 Bad_request 응답', (done)=> {
+            NotGoodId = 'id';
+            request(app)
+                .get(`/todos/:${id}?apikey=${testkey}`)
+                .expect(400)
+                .end(done)
+        }),
+        it('id가 null값이라면 Bad_request 응답', (done)=> {
+            NotGoodId = null
+            request(app)
+                .get(`/todos/:${id}?apikey=${testkey}`)
+                .expect(400)
+                .end(done)
+        })
+    });
+})
+
+

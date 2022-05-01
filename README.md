@@ -16,7 +16,7 @@ node js, express js, mysql입니다.
 > api_key 기준으로 인증받고 서비스 실행
 
 #### Unit Test, Integration Test
-> ```GET Todos``` : 진행 중  <br>
+> ```GET Todos``` : 테스트 코드 작성 완료  <br>
 > ```UPATE Todos``` : 진행 중  <br>
 > ```DELETE Todos``` : 진행 중  <br>
 > ```CREATE Todos``` : 테스트 코드 작성 완료  <br>
