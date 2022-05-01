@@ -24,7 +24,7 @@ const sql = {
   },
 
   createTodo : async (user_id, content, completed, next) => {
-    console.log(user_id, content, completed)
+    // console.log(user_id, content, completed)
     // 해당 INSERT가 완료하고 해당값 반환
     const result = await promisePool.query(`
       INSERT INTO todos
@@ -45,7 +45,7 @@ const sql = {
   },
 
   getTodo : async (apikey, id) => {
-    console.log(apikey, id)
+    // console.log(apikey, id)
     const result = await promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
@@ -56,7 +56,7 @@ const sql = {
   },
 
   getTodoList : async (apikey, limit, skip) => {
-    console.log(apikey)
+    // console.log(apikey, limit, skip)
     return promisePool.query(`
       SELECT id, name, completed, completed_at, created_at, updated_at
       FROM todos
@@ -67,7 +67,7 @@ const sql = {
   },
 
   updateCompleted : async (apikey, id, name, completed, next) => {
-    console.log(apikey, id, name, completed)
+    // console.log(apikey, id, name, completed)
     try {
       const result = await promisePool.query(`
       UPDATE todos 
@@ -88,7 +88,7 @@ const sql = {
   },
 
   deleteTodo : async (apikey, id) => {
-    console.log(apikey, id)
+    // console.log(apikey, id)
     const result = await promisePool.query(`
     DELETE FROM todos WHERE id = ${id}
     `)

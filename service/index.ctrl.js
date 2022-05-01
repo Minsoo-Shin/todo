@@ -21,7 +21,7 @@ async function create(req, res, next) {
         )
   
       // 결과 반환
-      return res.send(result)
+      return res.send(result[0])
     } catch (err) {
       console.log(err)
       next(Error(err))
@@ -107,7 +107,7 @@ async function update (req, res, next) {
 
 async function remove (req, res, next) {
   try {
-    console.log('id', req.params.id)
+    // console.log('id', req.params.id)
     const check = await validate({req:req, 
                                   name:false,
                                   completed:false, 
