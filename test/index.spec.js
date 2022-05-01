@@ -51,46 +51,75 @@ describe('POST /todos는', ()=> {
 })
 
 describe('GET /todos는', () => {
+    let testkey = 999
+    let id = 0
+    let idList = []
+    beforeEach('make', async ()=> {
+        for (let i = 0; i < 5; i++){
+            const result = await sql.createTodo(testkey, 'test', false)
+            idList.push(result[0].id)
+        }
+        console.log('idlist', idList);
+
+    })
+    afterEach('clear', (done)=> {
+        for (let i = 0; i < idList.length; i++){
+            sql.deleteTodo(testkey, idList[i])
+        }
+        idList = []
+        done();
+    });
     describe('성공시', () => {
         it('최대 limit 갯수 만큼 가져온다.', (done)=> {
             request(app)
-                .get('/todos?apikey=123&limit=2&skip=1')
+                .get(`/todos?apikey=${testkey}&limit=2&skip=0`)
+                .expect(200)
                 .end((req,res)=> {
                     res.body.should.be.lengthOf(2);
                     done();
+                })
+        })
+        it('skip수 만큼 제외하고 limit만큼 가져온다.', (done)=> {
+            request(app)
+                .get(`/todos?apikey=${testkey}&limit=1&skip=1`)
+                .expect(200)
+                .end((req,res)=> {
+                    should(res.body[0].id).equal(idList[1])
+                    done()
                 })
         })
     })
     describe('실패시', () => {
         it('limit가 숫자형이 아니라면', (done)=> {
             request(app)
-                .get('/todos?apikey=123&limit="notint"&skip=1')
+                .get(`/todos?apikey=${testkey}&limit="notint"&skip=1`)
                 .expect(400)
                 .end(done)
         }),
         it('limit가 null값 이라면', (done)=> {
             request(app)
-                .get('/todos?apikey=123&limit=null&skip=1')
+                .get(`/todos?apikey=${testkey}&limit=null&skip=1`)
                 .expect(400)
                 .end(done)
         }),
         it('skip가 숫자형이 아니라면', (done)=> {
             request(app)
-                .get('/todos?apikey=123&limit="12"&skip="notint"')
+                .get(`/todos?apikey=${testkey}&limit="12"&skip="notint"`)
                 .expect(400)
                 .end(done)
         }),
         it('skip가 null값 이라면', (done)=> {
             request(app)
-                .get('/todos?apikey=123&limit="12"&skip=null')
+                .get(`/todos?apikey=${testkey}&limit="12"&skip=null`)
                 .expect(400)
                 .end(done)
         }),
         it('limit값이 100 초과하면', (done)=> {
             request(app)
-                .get('/todos?apikey=123&limit=1000&skip=1')
+                .get(`/todos?apikey=${testkey}&limit=1000&skip=1`)
                 .expect(400)
                 .end(done)
         })
     });
 })
+
