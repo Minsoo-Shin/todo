@@ -6,8 +6,9 @@ const sql = require('../database/sql')
 describe('POST /todos는', ()=> {
     describe('성공시', ()=> {
         let id = 0
-        afterEach('clear', ()=> {
+        afterEach('clear', (done)=> {
             sql.deleteTodo(999, id)
+            done();
         });
 
         it('todo를 만들면 json 형식으로 응답을 받는다. ', (done)=> {
@@ -19,8 +20,6 @@ describe('POST /todos는', ()=> {
                     id = res.body.id;
                     done()
                 })
-            
-            //삭제 로직 필요
         }),
         it('completed에 null값이라도 응답을 받는다. ', (done)=> {
             request(app)
@@ -31,7 +30,6 @@ describe('POST /todos는', ()=> {
                     id = res.body.id;
                     done()
                 })
-            //삭제 로직 필요
         })
     })
     describe('실패시', ()=> {

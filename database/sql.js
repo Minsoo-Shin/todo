@@ -26,6 +26,7 @@ const sql = {
   createTodo : async (user_id, content, completed, next) => {
     // console.log(user_id, content, completed)
     // 해당 INSERT가 완료하고 해당값 반환
+    if (!completed) completed = false
     const result = await promisePool.query(`
       INSERT INTO todos
       (name, completed, fk_user_id)
