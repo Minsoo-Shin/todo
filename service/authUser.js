@@ -1,5 +1,5 @@
 const isEmpty = require('./isEmpty');
-var sql = require('../database/sql');
+const sql = require('../database/sql'); // always 'const', sometimes let, never var
 
 async function authUser(req, res, next) {
     try {
