@@ -1,6 +1,6 @@
 const validate = require('./validate');
 const sql = require('../database/sql');
-const isEmpty = require('./isEmpty');
+const isEmpty = require('./isEmpty'); // isEmpty가 lodash 내에 있지 않나요? _.isEmpty
 const _ = require('lodash');
 
 async function create(req, res, next) {
