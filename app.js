@@ -1,4 +1,4 @@
-var createError = require('http-errors');
+var createError = require('http-errors'); // always const, sometimes let, never var
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -24,7 +24,10 @@ app.use('/users', usersRouter);
 
 // error handler (4xx)
 app.use((err, req, res, next) => {
-  if (err.message === 'Bad_Request') {
+  if (err.message === 'Bad_Request') { // error message는 file 하나에 string으로 정리해주세용. 
+    // ex) export const BAD_REQUEST = 400
+    // ex) export const FORBIDDEN = 403
+    // ex) export const NOT_FOUND = 404
     return res.status(400).json({ status : 400, error : err.message});
   } else if (err.message === 'Not_Authorized') {
     return res.status(401).json({ status : 401, error : err.message});
